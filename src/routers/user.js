@@ -1,4 +1,5 @@
 const express = require("express");
+const multer = require("multer");
 const User = require("../models/user");
 const auth = require("../middleware/auth");
 
@@ -121,6 +122,15 @@ router.delete("/users/me", auth, async (req, res) => {
 		console.log(e);
 		res.status(400).send(e);
 	}
+});
+
+const upload = multer({
+	dest: "avatar",
+});
+
+// the file key name in the request body needs to match the string in upload.single()
+router.post("/users/me/avatar", upload.single("avatar"), (req, res) => {
+	res.send();
 });
 
 module.exports = router;

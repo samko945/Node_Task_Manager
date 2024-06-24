@@ -7,6 +7,16 @@ const taskRouter = require("./routers/task");
 const app = express();
 const port = process.env.PORT || 3000;
 
+const multer = require("multer");
+const upload = multer({
+	dest: "images",
+});
+
+// the file key name in the request body needs to match the string in upload.single()
+app.post("/upload", upload.single("upload"), (req, res) => {
+	res.send();
+});
+
 /*
 Each app.use(middleware) is called every time a request is sent to the server
 Order matters. i.e. Each middleware function is executed in the order in which it is defined - you need to execute one before the other in order to utilise its functionality. 
