@@ -26,6 +26,13 @@ router.get("/tasks", auth, async (req, res) => {
 			// 	completed: false,
 			// },
 			match,
+			options: {
+				// first page of 2 is {limit:2, skip:0}, second page of 2 is {limit:2, skip:2}
+				// how many results to get
+				limit: parseInt(req.query.limit),
+				// how many results to skip
+				skip: parseInt(req.query.skip),
+			},
 		});
 
 		// res.send(tasks);
