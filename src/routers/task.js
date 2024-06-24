@@ -15,8 +15,16 @@ router.post("/tasks", auth, async (req, res) => {
 
 router.get("/tasks", auth, async (req, res) => {
 	const match = {};
+	const sort = {};
 	if (req.query.completed) {
 		match.completed = req.query.completed === "true";
+	}
+	if (req.query.sortBy) {
+		// in the query ":" is between key/value pairs
+		const parts = req.query.sortBy.split(":");
+		// use [0] and [1] to access each part and convert asc or desc into 1 or -1
+		sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
+		console.log(parts[0], parts[1]);
 	}
 	try {
 		// const tasks = await Task.find({ owner: req.user._id });
@@ -32,6 +40,11 @@ router.get("/tasks", auth, async (req, res) => {
 				limit: parseInt(req.query.limit),
 				// how many results to skip
 				skip: parseInt(req.query.skip),
+				// sort: {
+				// 	// 1 is ascending, -1 is descending
+				// 	createdAt: -1,
+				// },
+				sort,
 			},
 		});
 
