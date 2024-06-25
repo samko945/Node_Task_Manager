@@ -158,4 +158,18 @@ router.delete("/users/me/avatar", auth, async (req, res) => {
 	res.send();
 });
 
+// get image via url e.g localhost:3000/users/667b2111b5a1531af6d8a52a/avatar
+router.get("/users/:id/avatar", async (req, res) => {
+	try {
+		const user = await User.findById(req.params.id);
+		if (!user || !user.avatar) {
+			throw new Error("Resource not found");
+		}
+		res.set("Content-Type", "image/jpg");
+		res.send(user.avatar);
+	} catch (error) {
+		res.status(404).send({ error: error.message });
+	}
+});
+
 module.exports = router;
