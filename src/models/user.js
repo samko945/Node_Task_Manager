@@ -54,6 +54,9 @@ const userSchema = new mongoose.Schema(
 				},
 			},
 		],
+		avatar: {
+			type: Buffer,
+		},
 	},
 	{
 		// will create timestamps of when users are created and updated

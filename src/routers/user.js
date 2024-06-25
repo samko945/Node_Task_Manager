@@ -125,7 +125,8 @@ router.delete("/users/me", auth, async (req, res) => {
 });
 
 const upload = multer({
-	dest: "avatar",
+	// instead of using dest to save the file locally, use req.file.buffer (when dest isn't set)
+	// dest: "avatar",
 	limits: { fileSize: 1_000_000 },
 	fileFilter(req, file, cb) {
 		if (!file.originalname.match(/\.(jpeg|jpg|png)$/)) {
@@ -138,13 +139,23 @@ const upload = multer({
 // the file key name in the request body needs to match the string in upload.single()
 router.post(
 	"/users/me/avatar",
+	auth,
 	upload.single("avatar"),
-	(req, res) => {
+	async (req, res) => {
+		req.user.avatar = req.file.buffer;
+		// image can be displayed from binary using <img src="data:image/jpg;base64,BINARY_STRING"/>
+		await req.user.save();
 		res.send();
 	},
 	(error, req, res, next) => {
 		res.status(400).send({ error: error.message });
 	}
 );
+
+router.delete("/users/me/avatar", auth, async (req, res) => {
+	req.user.avatar = undefined;
+	await req.user.save();
+	res.send();
+});
 
 module.exports = router;
