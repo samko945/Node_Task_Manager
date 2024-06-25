@@ -95,8 +95,10 @@ userSchema.methods.toJSON = function () {
 	const userObject = user.toObject();
 
 	// The delete operator removes a property from an object.
+	// in this case, the response body object
 	delete userObject.password;
 	delete userObject.tokens;
+	delete userObject.avatar;
 	return userObject;
 };
 

@@ -7,46 +7,46 @@ const taskRouter = require("./routers/task");
 const app = express();
 const port = process.env.PORT || 3000;
 
-const multer = require("multer");
-const upload = multer({
-	dest: "images",
-	limits: {
-		fileSize: 1000000,
-	},
-	fileFilter(req, file, cb) {
-		// if (!file.originalname.endsWith(".pdf")) {
-		if (!file.originalname.match(/\.(doc|docx)$/)) {
-			return cb(new Error("Please upload a Word document"));
-		}
+// const multer = require("multer");
+// const upload = multer({
+// 	dest: "images",
+// 	limits: {
+// 		fileSize: 1000000,
+// 	},
+// 	fileFilter(req, file, cb) {
+// 		// if (!file.originalname.endsWith(".pdf")) {
+// 		if (!file.originalname.match(/\.(doc|docx)$/)) {
+// 			return cb(new Error("Please upload a Word document"));
+// 		}
 
-		cb(undefined, true);
+// 		cb(undefined, true);
 
-		// // error
-		// cb(new Error("File must be a PDF."));
-		// // no error, accept file
-		// cb(undefined, true);
-		// // no error, reject file
-		// cb(undefined, false);
-	},
-});
+// 		// // error
+// 		// cb(new Error("File must be a PDF."));
+// 		// // no error, accept file
+// 		// cb(undefined, true);
+// 		// // no error, reject file
+// 		// cb(undefined, false);
+// 	},
+// });
 
-// example of an error occuring in a middleware and then being handled in the error handling middleware
-const errorMiddleware = (req, res, next) => {
-	throw new Error("From my middleware");
-};
+// // example of an error occuring in a middleware and then being handled in the error handling middleware
+// const errorMiddleware = (req, res, next) => {
+// 	throw new Error("From my middleware");
+// };
 
-// the file key name in the request body needs to match the string in upload.single()
-app.post(
-	"/upload",
-	errorMiddleware,
-	(req, res) => {
-		res.send();
-	},
-	// Error handling middleware
-	(error, req, res, next) => {
-		res.status(400).send({ error: error.message });
-	}
-);
+// // the file key name in the request body needs to match the string in upload.single()
+// app.post(
+// 	"/upload",
+// 	errorMiddleware,
+// 	(req, res) => {
+// 		res.send();
+// 	},
+// 	// Error handling middleware
+// 	(error, req, res, next) => {
+// 		res.status(400).send({ error: error.message });
+// 	}
+// );
 
 /*
 Each app.use(middleware) is called every time a request is sent to the server
