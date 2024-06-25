@@ -126,6 +126,13 @@ router.delete("/users/me", auth, async (req, res) => {
 
 const upload = multer({
 	dest: "avatar",
+	limits: { fileSize: 1_000_000 },
+	fileFilter(req, file, cb) {
+		if (!file.originalname.match(/\.(jpeg|jpg|png)$/)) {
+			cb(new Error("File needs to be a jpeg, jpg or png"));
+		}
+		cb(undefined, true);
+	},
 });
 
 // the file key name in the request body needs to match the string in upload.single()
