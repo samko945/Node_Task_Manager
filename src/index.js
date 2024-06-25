@@ -10,6 +10,24 @@ const port = process.env.PORT || 3000;
 const multer = require("multer");
 const upload = multer({
 	dest: "images",
+	limits: {
+		fileSize: 1000000,
+	},
+	fileFilter(req, file, cb) {
+		// if (!file.originalname.endsWith(".pdf")) {
+		if (!file.originalname.match(/\.(doc|docx)$/)) {
+			return cb(new Error("Please upload a Word document"));
+		}
+
+		cb(undefined, true);
+
+		// // error
+		// cb(new Error("File must be a PDF."));
+		// // no error, accept file
+		// cb(undefined, true);
+		// // no error, reject file
+		// cb(undefined, false);
+	},
 });
 
 // the file key name in the request body needs to match the string in upload.single()
