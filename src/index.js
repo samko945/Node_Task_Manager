@@ -30,10 +30,23 @@ const upload = multer({
 	},
 });
 
+// example of an error occuring in a middleware and then being handled in the error handling middleware
+const errorMiddleware = (req, res, next) => {
+	throw new Error("From my middleware");
+};
+
 // the file key name in the request body needs to match the string in upload.single()
-app.post("/upload", upload.single("upload"), (req, res) => {
-	res.send();
-});
+app.post(
+	"/upload",
+	errorMiddleware,
+	(req, res) => {
+		res.send();
+	},
+	// Error handling middleware
+	(error, req, res, next) => {
+		res.status(400).send({ error: error.message });
+	}
+);
 
 /*
 Each app.use(middleware) is called every time a request is sent to the server
