@@ -12,7 +12,7 @@ router.post("/users", async (req, res) => {
 		const token = await user.generateAuthToken();
 		res.status(201).send({ user, token });
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		res.status(400).send(error);
 		// www.webfx.com/web-development/glossary/http-status-codes
 	}
