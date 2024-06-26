@@ -4,11 +4,14 @@ const User = require("../models/user");
 const auth = require("../middleware/auth");
 const sharp = require("sharp");
 
+const { sendWelcomeEmail } = require("../emails/account.js");
+
 const router = express.Router();
 
 router.post("/users", async (req, res) => {
 	try {
 		const user = await new User(req.body).save();
+		sendWelcomeEmail(user.email, user.name);
 		const token = await user.generateAuthToken();
 		res.status(201).send({ user, token });
 	} catch (error) {
