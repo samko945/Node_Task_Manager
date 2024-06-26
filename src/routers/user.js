@@ -4,7 +4,7 @@ const User = require("../models/user");
 const auth = require("../middleware/auth");
 const sharp = require("sharp");
 
-const { sendWelcomeEmail } = require("../emails/account.js");
+const { sendWelcomeEmail, sendGoodbyeEmail } = require("../emails/account.js");
 
 const router = express.Router();
 
@@ -120,7 +120,7 @@ router.delete("/users/me", auth, async (req, res) => {
 		// const result = await userDelete.deleteOne();
 		const removed = await user.deleteOne();
 		console.log("Removed User: ", removed);
-
+		sendGoodbyeEmail(user.email, user.name);
 		res.send({ Removed: { user: req.user } });
 	} catch (e) {
 		console.log(e);
