@@ -8,6 +8,9 @@
 		"dev": "env-cmd -f ./.env nodemon src/index.js",
 		"start": "node src/index.js"
 	},
+	"jest": {
+		"testEnvironment": "node"
+	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
@@ -26,6 +29,7 @@
 	},
 	"devDependencies": {
 		"jest": "^23.6.0",
-		"nodemon": "^3.0.2"
+		"nodemon": "^3.0.2",
+		"supertest": "^3.4.1"
 	}
 }
