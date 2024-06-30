@@ -24,7 +24,7 @@ beforeEach(async () => {
 });
 
 test("Should signup a new user", async () => {
-	await request(app)
+	const response = await request(app)
 		.post("/users")
 		.send({
 			name: "Sam",
@@ -32,16 +32,36 @@ test("Should signup a new user", async () => {
 			password: "sam12345",
 		})
 		.expect(201);
+
+	// Assert that the database was changed correctly
+	const user = await User.findById(response.body.user._id);
+	expect(user).not.toBeNull();
+
+	// Assertions about the response
+	// toMatchObject makes sure that it contains the key/values listed, the obj can contain unmentioned data
+	expect(response.body).toMatchObject({
+		user: {
+			name: "Sam",
+			email: "samjavorka@gmail.com",
+		},
+		token: user.tokens[0].token,
+	});
+	// Assert that the password is not stored in plain text
+	expect(user.password).not.toBe("sam12345");
 });
 
 test("Should login existing user", async () => {
-	await request(app)
+	const response = await request(app)
 		.post("/users/login")
 		.send({
 			email: userOne.email,
 			password: userOne.password,
 		})
 		.expect(200);
+
+	const user = await User.findById(response.body.user._id);
+	// Validate that new token is saved
+	expect(response.body.token).toBe(user.tokens[1].token);
 });
 
 test("Should not login nonexistent user", async () => {
@@ -63,7 +83,15 @@ test("Should not get profile for unauthenticated user", async () => {
 });
 
 test("Should delete account for user", async () => {
-	await request(app).delete("/users/me").set("Authorization", `Bearer ${userOne.tokens[0].token}`).send().expect(200);
+	const response = await request(app)
+		.delete("/users/me")
+		.set("Authorization", `Bearer ${userOne.tokens[0].token}`)
+		.send()
+		.expect(200);
+
+	// Validate that the user has been removed from the database
+	const user = await User.findById(response.body.Removed.user._id);
+	expect(user).toBeNull();
 });
 
 test("Should not delete account for unauthenticated user", async () => {
