@@ -11,7 +11,7 @@ const router = express.Router();
 router.post("/users", async (req, res) => {
 	try {
 		const user = await new User(req.body).save();
-		sendWelcomeEmail(user.email, user.name);
+		// sendWelcomeEmail(user.email, user.name);
 		const token = await user.generateAuthToken();
 		res.status(201).send({ user, token });
 	} catch (error) {
@@ -120,7 +120,7 @@ router.delete("/users/me", auth, async (req, res) => {
 		// const result = await userDelete.deleteOne();
 		const removed = await user.deleteOne();
 		console.log("Removed User: ", removed);
-		sendGoodbyeEmail(user.email, user.name);
+		// sendGoodbyeEmail(user.email, user.name);
 		res.send({ Removed: { user: req.user } });
 	} catch (e) {
 		console.log(e);
