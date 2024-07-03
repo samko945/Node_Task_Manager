@@ -130,7 +130,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
   It's more effecient to have this here once instead of both in the POST and UPDATE routes of user
 */
 userSchema.pre("save", async function (next) {
-	console.log("Just before saving");
+	// console.log("Just before saving");
 	const user = this;
 	if (user.isModified("password")) {
 		// Hashing algorithms are one-way, they cannot be converted back. Unlike encyption which is reversable
