@@ -115,6 +115,15 @@ test("Should update valid user fields", async () => {
 		.send({ name: "Tobi" })
 		.expect(200);
 
-	const user = await User.findById(userOne.userOneId);
-	console.log(user);
+	const user = await User.findById(userOne._id);
+	expect(user.name).toEqual("Tobi");
+});
+
+test("Should not update invalid user fields", async () => {
+	await request(app)
+		.patch("/users/me")
+		.set("Authorization", `Bearer ${userOne.tokens[0].token}`)
+		// example of field that doesn't exist
+		.send({ location: "London" })
+		.expect(400);
 });
