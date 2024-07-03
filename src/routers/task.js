@@ -7,7 +7,7 @@ const router = new express.Router();
 router.post("/tasks", auth, async (req, res) => {
 	try {
 		const newTask = await new Task({ ...req.body, owner: req.user._id }).save();
-		res.status(201).send(`saved: \n${newTask}`);
+		res.status(201).send({ saved: newTask });
 	} catch (e) {
 		res.status(400).send(e);
 	}
