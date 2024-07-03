@@ -2,5 +2,7 @@
 
 module.exports = {
 	setApiKey() {},
-	send() {},
+	send() {
+		return Promise.resolve();
+	},
 };
